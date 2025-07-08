@@ -1,0 +1,42 @@
+TTS:
+  MacTTS:
+    voice: Tingting
+    output_file: tmp/
+  EdgeTTS:
+    voice: zh-CN-XiaoxiaoNeural
+    output_file: tmp/
+    delay: 0
+  GTTS:
+    lang: zh
+    output_file: tmp/
+  CosyvoiceTTS:
+    output_file: tmp/
+  CHATTTS:
+    output_file: tmp/
+    delay: 0
+  KOKOROTTS:
+    output_file: tmp/
+    voice_en: voices/af_maple.pt  #af_heart #zm_yunyang
+    voice_zh: voices/zf_001.pt  #af_heart #zm_yunyang
+    model_dir: models/tts/kokoro-82M-v1.1-zh
+    delay: 0
+  PiperTTS:
+    voice_zh: 'zh_CN-huayan-medium' #en_US-amy-medium
+    voice_en: "en_US-amy-medium"
+    output_file: tmp/
+    model_dir: models/tts/piper
+    delay: 0
+  CosyVoiceTTS:
+    voice_zh: "中文女" #en_US-amy-medium
+    voice_en: "英文女"
+    output_file: tmp/
+    model_dir: models/tts/CosyVoice-300M-Instruct
+    project_dir: third_party/CosyVoice
+    delay: 0
+  MegaTTS:
+    voice_zh: "asset/zf_z.wav" #en_US-amy-medium
+    voice_en: "asset/fm_a.wav"
+    output_file: tmp/
+    model_dir: models/tts/MegaTTS3
+    project_dir: third_party/MegaTTS3
+    delay: 0

@@ -1,0 +1,20 @@
+[Unit]
+Description=tronagent
+After=network.target
+# 若依赖其他服务（如数据库），可添加到这里
+# Requires=mysql.service
+# After=mysql.service
+
+[Service]
+# 启动脚本路径（确保脚本有可执行权限：chmod +x start.sh）
+ExecStart=/home/limx/guest/Tron-Agent/start.sh
+
+# 工作目录（脚本中若使用相对路径，会基于此目录）
+WorkingDirectory=/home/guest/tron/Tron-Agent
+
+# 自动重启配置
+Restart=failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

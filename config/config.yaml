@@ -1,0 +1,159 @@
+name: tron one,小创
+version: 1.0
+
+logging:
+  level: debug
+
+# 唤醒词
+WakeWord: hey chuang,小创小创
+Language: zh #en or zh
+interrupt: true
+# 是否开启工具调用
+StartTaskMode: true
+ActionTask: true
+web_enable: true
+use_llm: true
+USB: true
+device_wakeup: true
+algrithm_wakeup: true
+timeout: 8
+sleeptime: 10
+# 具体处理时选择的模块
+selected_module:
+  Recorder: RecorderPyAudio
+  ASR: FunASR
+  VAD: SileroVAD
+  LLM: OpenAILLM
+  TTS: PiperTTS
+  Player: PygameSoundPlayer
+  Translator: HelsinkiTranslator
+Recorder:
+  RecorderPyAudio:
+    output_file: tmp/
+  RecorderArecord:
+    output_file: tmp/
+
+
+ASR:
+  FunASR:
+    model_dir: models/SenseVoiceSmall
+    output_file: tmp/
+    vad_dir: models/fsmn_vad
+  WhisperASR:
+    model_dir: models/whisper-small.en
+    output_file: tmp/
+
+VAD:
+  SileroVAD:
+    sampling_rate: 16000
+    threshold: 0.3 #越大越能识别到
+    min_silence_duration_ms: 200 # 如果说话停顿比较长，可以把这个值设置大一些
+WakeUp:
+  TextSimilarity:
+    threshold: 0.7
+    base_text: 
+      en: hey chuang
+      zh: 嘿创
+LLM:
+  OpenAILLM:
+    model_name: modelscope.cn/unsloth/Qwen3-1.7B-GGUF:latest
+    url: http://127.0.0.1:11434/v1
+    api_key: ollama
+
+TTS:
+  MacTTS:
+    voice: Tingting
+    output_file: tmp/
+  EdgeTTS:
+    voice: zh-CN-XiaoxiaoNeural
+    output_file: tmp/
+    delay: 0
+  GTTS:
+    lang: zh
+    output_file: tmp/
+  CosyvoiceTTS:
+    output_file: tmp/
+  CHATTTS:
+    output_file: tmp/
+    delay: 0
+  KOKOROTTS:
+    output_file: tmp/
+    voice_en: voices/af_maple.pt  #af_heart #zm_yunyang
+    voice_zh: voices/zf_001.pt  #af_heart #zm_yunyang
+    model_dir: models/tts/kokoro-82M-v1.1-zh
+    delay: 0
+  PiperTTS:
+    voice_zh: 'zh_CN-huayan-medium' #en_US-amy-medium
+    voice_en: "en_US-amy-medium"
+    output_file: tmp/
+    model_dir: models/tts/piper
+    delay: 0
+  CosyVoiceTTS:
+    voice_zh: "中文女" #en_US-amy-medium
+    voice_en: "英文女"
+    output_file: tmp/
+    model_dir: models/tts/CosyVoice-300M-Instruct
+    project_dir: third_party/CosyVoice
+    delay: 0
+  MegaTTS:
+    voice_zh: asset/zf_z.wav #en_US-amy-medium
+    voice_en: asset/fm_a.wav
+    output_file: tmp/
+    model_dir: models/tts/MegaTTS3
+    project_dir: third_party/MegaTTS3
+    delay: 0
+  KedaTTS:
+    output_file: tmp/
+    APPID: ""
+    APIKey: ""
+    APISecret: ""
+    delay: 0
+  TTSAPI:
+    selected_module: MegaTTS
+    init_api: ""
+    api: ""
+    output_file: tmp/
+    config:
+      MegaTTS:
+        voice_zh: asset/zf_z.wav #en_US-amy-medium
+        voice_en: asset/fm_a.wav
+        output_file: tmp/
+        model_dir: models/tts/MegaTTS3
+        project_dir: third_party/MegaTTS3
+        delay: 0
+
+
+Player:
+  PygameSoundPlayer: null
+  PygamePlayer: null
+  CmdPlayer: null
+  PyaudioPlayer: null
+  AplayPlayer: null
+
+Rag:
+  doc_path: documents/
+  emb_model: models/rag/bge-small-zh
+  model_name: modelscope.cn/unsloth/Qwen3-1.7B-GGUF:latest
+  url: http://127.0.0.1:11434/v1
+  api_key: "ollama"
+
+Memory:
+  dialogue_history_path: tmp/
+  memory_file: tmp/memory.json
+  model_name: modelscope.cn/unsloth/Qwen3-1.7B-GGUF:latest
+  url: http://127.0.0.1:11434/v1
+  api_key: "ollama"
+
+TaskManager:
+  functions_call_name: plugins/function_calls_config.json
+  aigc_manus_enabled: false
+
+Communication:
+  robot_ip: "10.192.1.2"
+  action_history_path: tmp/
+
+Translator:
+  HelsinkiTranslator:
+    model_dir: models/translation/Helsinki-NLP
+  Translators:
+    translator: alibaba

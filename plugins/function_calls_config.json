@@ -1,0 +1,65 @@
+[
+    {
+        "type": "function",
+        "function": {
+            "name": "TronAction",
+            "description": "控制机器人动作的工具，支持站立、坐下和移动，高度调整,颜色变化等操作。当用户想要控制机器人动作时，自动调用该函数",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "action": {
+                        "type": "string",
+                        "description": "机器人动作类型，可选值只能为 'stand', 'sit', 'twist','height','light'。其中stand指向与机器人站立相关的动作，这时的x,y,z参数为空；sit指向与机器人蹲下相关的动作，这时的x,y,z参数为空；twist指向于机器人移动相关的动作，前后移动速度x不为零范围随机在(-1,1)，左右移动速度y不为零范围随机在(-1,1)，转动相关如转圈则角速度z不为零范围随机在(-1,1)，step指向移动的步数;height指向机器人的升高和降低，与direction参数相关，1表示升高，-1表示降低，每次升高或者降低只会变化5厘米/公分;light表示调整机器人灯光颜色只于effect参数相关，effect取值范围为（1，21）的整数，分别对应如下：1: STATIC_RED（静态红色），2: STATIC_GREEN（静态绿色），3: STATIC_BLUE（静态蓝色），4: STATIC_CYAN（静态青色），5: STATIC_PURPLE（静态紫色），6: STATIC_YELLOW（静态黄色），7: STATIC_WHITE（静态白色）8: LOW_FLA，H_RED（低频闪烁红色），9: LOW_FLASH_GREEN（低频闪烁绿色），10: LOW_FLASH_BLUE（低频闪烁蓝色），11: LOW_FLASH_CYAN（低频闪烁青色），12: LOW_FLASH_PURPLE（低频闪烁紫色），13: LOW_FLASH_YELLOW（低频闪烁黄色），14: LOW_FLASH_WHITE（低频闪烁白色），15: FAST_FLASH_RED（高频闪烁红色）16: FAST_FLASH_GREEN（高频闪烁绿色）,17: FAST_FLASH_BLUE（高频闪烁蓝色）,18: FAST_FLASH_CYAN（高频闪烁青色）,19: FAST_FLASH_PURPLE（高频闪烁紫色）,20: FAST_FLASH_YELLOW（高频闪烁黄色）,21: FAST_FLASH_WHITE（高频闪烁白色）"
+                    },
+                    "parameters": {
+                        "type": "object",
+                        "description": "动作参数，具体取决于动作类型。只有以下几个可选值：x,y,z,step,direction",
+                        "properties": {
+                            "x": {
+                                "type": "float",
+                                "description": "移动时的线速度 x（m/s）。范围随机在(-1,1)，其中-1-0是向后移动，0-1是向前移动"
+                            },
+                            "y": {
+                                "type": "float",
+                                "description": "移动时的线速度 y（m/s）。范围随机在(-1,1)，其中-1-0是向左移动，0-1是向右移动"
+                            },
+                            "z": {
+                                "type": "float",
+                                "description": "移动时的角速度 z（rad/s）。与机器人转向相关，范围随机在(-1,1)，其中-1-0是向左转，0-1是向右转"
+                            },
+                            "step": {
+                                "type": "integer",
+                                "description": "移动时的步数。当action值为twist时需要根据step确定移动几步"
+                            },
+                            "direction": {
+                                "type": "integer",
+                                "description": "与升高，降低相关的参数，当机器人要升高时，为1，要降低时为-1。"
+                            },
+                            "effect": {
+                                "type": "integer",
+                                "description": "与灯光颜色变化相关，effect的值是(1,21)的整数。"
+                            }
+                        }
+                        }
+                    }
+                },
+                "required": ["action"]
+            }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "GetWeather",
+            "description": "当用户要查询天，温度等信息时，自动调用该函数",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "city": {
+                        "type": "string",
+                        "description": "城市地址"
+                    }
+                },
+                "required": ["city"]
+            }
+        }
+    }]

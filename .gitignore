@@ -1,0 +1,50 @@
+# 忽略所有 .pyc 文件
+*.pyc
+*.git
+# 忽略所有 __pycache__ 目录
+__pycache__/
+
+
+# 忽略特定目录
+logs/
+Dockerfile
+# 忽略所有临时文件
+*.tmp
+
+# 忽略所有自动生成的文件
+*.auto
+
+# 忽略所有以 .log 结尾的文件
+*.log
+
+# 忽略所有以 .tmp 结尾的文件
+*.tmp
+
+# 忽略所有以 tmp文件
+tmp/
+models/
+tools/
+asset/
+# 忽略所有以 .bak 结尾的文件
+*.bak
+
+# 忽略所有以 .swp 结尾的文件
+*.swp
+
+# 忽略所有以 .DS_Store 结尾的文件
+.DS_Store
+
+# 忽略所有以 .gitignore 结尾的文件
+.gitignore
+
+# 忽略所有以 .env 结尾的文件
+.env
+
+# 忽略所有以 .idea 结尾的目录
+.idea/
+
+# 忽略所有以 .vscode 结尾的目录
+.vscode/
+
+# 忽略所有以 .vs 结尾的目录
+.vs/
