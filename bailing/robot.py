@@ -637,7 +637,7 @@ class Robot(ABC):
             if self.use_llm and len(query)>=3:
                 try:
                     logger.info(self.task_manager.get_functions())
-                    dialogue=[{"role":"system","content":self.system_prompt[self.language]},{"role":"user","content":query}]
+                    dialogue=[{"role":"system","content":self.system_prompt[self.language]},{"role":"user","content":query+"/no_think"}]
                     future = self.executor.submit(self.llm.response_call,dialogue,functions_call=self.task_manager.get_functions())
                     timeout=0
                     while not future.done():

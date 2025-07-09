@@ -38,7 +38,8 @@ class BaseWebSocket:
         self.accid = ""
         self.memory = Memory() if memory is None else memory
         self.current_request = None  # 保存当前请求
-        self.close=False
+        self.reconnect_attempts = 0
+        self.max_reconnect_attempts = 8
         logger.info("WebSocket client initialized.")
         self.run_thread=threading.Thread(target=self.client.run_forever, daemon=True).start()
         self.running = True  # 用于控制监听线程的运行状态
@@ -151,7 +152,6 @@ class BaseWebSocket:
             close_status_code (int): WebSocket 关闭状态码。
             close_msg (str): WebSocket 关闭消息。
         """
-        self.close=True
         logger.info(f"WebSocket connection closed. Code: {close_status_code}, Message: {close_msg}")
 
     def close_connection(self):
@@ -232,18 +232,24 @@ class BaseWebSocket:
         尝试重新连接 WebSocket。
         """
         try:
-            logger.info("Attempting to reconnect WebSocket...")
-            self.client = websocket.WebSocketApp(
-                f'ws://{self.robot_ip}:5000',
-                on_open=self.on_open,
-                on_message=self.on_message,
-                on_close=self.on_close
-            )
-            threading.Thread(target=self.client.run_forever, daemon=True).start()
-            logger.info("WebSocket reconnected successfully.")
-            if self.current_request:
-                logger.info("Resending the last request after reconnecting.")
-                self.send_request(self.current_request["title"], self.current_request["data"])
+            self.reconnect_attempts += 1
+            if self.reconnect_attempts > self.max_reconnect_attempts:
+                logger.error(f"Reconnect failed after {self.max_reconnect_attempts} attempts. Stopping.")
+                self.running = False
+                return
+            if self.running:
+                logger.info("Attempting to reconnect WebSocket...")
+                self.client = websocket.WebSocketApp(
+                    f'ws://{self.robot_ip}:5000',
+                    on_open=self.on_open,
+                    on_message=self.on_message,
+                    on_close=self.on_close
+                )
+                threading.Thread(target=self.client.run_forever, daemon=True).start()
+                logger.info("WebSocket reconnected successfully.")
+                if self.current_request:
+                    logger.info("Resending the last request after reconnecting.")
+                    self.send_request(self.current_request["title"], self.current_request["data"])
         except Exception as e:
             logger.error(f"Failed to reconnect WebSocket: {e}")
 

@@ -34,7 +34,7 @@ PROMPT={
           "{memory}"
       ],
       "context_prompt":[
-          """Please answer the final question based on the following context. The answer should be concise and clear, using no more than three sentences to ensure it directly addresses the question. If you can't find the answer or you don't know, you can reply:I'm still learning and can't do it for the time being.""",
+          """Please answer the final question based on the following context. The answer should be concise and clear, using no more than three sentences to ensure it directly addresses the question. If no answer can be found, respond directly without referring to the context.""",
           "#The following is the context information:",
           "{context}"
       ],
@@ -93,7 +93,7 @@ PROMPT={
         "请遵循用户的指示，但不要执行任何危险或非法的操作。",
         "请在回答中使用简体中文。",
         "回复禁止出现表情符号和特殊字符。",
-        "如果用户输入疑问句你也需要直接调用工具",
+        "如果用户输入疑问句你也需要直接调用工具或者直接回答问题",
         "不要多种语言混杂，尽可能保证只有一种响应语言。你的回复语言必须是中文!你的回复语言必须是中文,且回复尽量再三句话以内。",
         """
         你可以使用的工具有：
@@ -108,7 +108,7 @@ PROMPT={
           "{memory}"
       ],
       "context_prompt":[
-          "请根据以下上下文回答最后的问题。回答应简洁明了，最多使用三句话，确保直接针对问题。如果找不到答案或者你不知道可以回复“我还在学习，暂时不会。”",
+          "请根据以下上下文回答最后的问题。回答应简洁明了，最多使用三句话，确保直接针对问题。如果找不到答案,则不需要参考上下文直接响应。",
           "#以下是上下文信息:",
           "{context}"
       ],
