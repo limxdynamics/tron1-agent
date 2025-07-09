@@ -43,8 +43,8 @@ cd Tron-Agent
 conda create -n tronagent
 conda activate tronagent
 pip install -r requirments.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
-pip install tools/scipy/en_core_web_trf-3.8.0-py3-none-any.whl
-pip install tools/scipy/zh_core_web_trf-3.8.0-py3-none-any.whl
+python -m spacy download zh_core_web_trf
+python -m spacy download en_core_web_trf
 pip install WeTextProcessing==1.0.3 #x86
 ```
 
@@ -56,17 +56,17 @@ ollama run modelscope.cn/unsloth/Qwen3-1.7B-GGUF
 
 4. 下载相关模型
 ```bash
-cd models
+mkdir models && cd models
 modelscope download --model IndexTeam/IndexTTS-1.5 --local_dir tts/indextts
-modelscope download --model iic/SenseVoiceSmall --local_dr SenseVoiceSmall
+modelscope download --model iic/SenseVoiceSmall --local_dir SenseVoiceSmall
 modelscope download --model BAAI/bge-small-zh --local_dir rag/bge-small-zh
 modelscope download --model BAAI/bge-small-en --local_dir rag/bge-small-en
 modelscope download --model iic/speech_fsmn_vad_zh-cn-16k-common-pytorch --local_dir fsmn_vad
 git lfs install
-mkdir translation/Helsinki-NLP & cd translation/Helsinki-NLP
+mkdir -p translation/Helsinki-NLP && cd translation/Helsinki-NLP
 git clone https://huggingface.co/Helsinki-NLP/opus-mt-zh-en
 git clone https://huggingface.co/Helsinki-NLP/opus-mt-en-zh
-cd .. & mkdir tts/piper & cd tts/piper
+cd ../.. && mkdir -p tts/piper && cd tts/piper
 #相关模型地址 https://huggingface.co/rhasspy/piper-voices/tree/v1.0.0
 wget https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/en/en_US/amy/medium/en_US-amy-medium.onnx
 wget https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/en/en_US/amy/medium/en_US-amy-medium.onnx.json
@@ -82,8 +82,6 @@ make clean
 cd tools/pynini/pynini-2.1.5.post2
 python setup.py install
 pip install WeTextProcessing==1.0.3 --no-deps
-python -m spacy download zh_core_web_trf
-python -m spacy download en_core_web_trf
 # jetpack6 and cuda12.6
 wget https://pypi.jetson-ai-lab.dev/jp6/cu126/+f/027/bb91e7bccb0b9/torch-2.8.0-cp310-cp310-linux_aarch64.whl#sha256=027bb91e7bccb0b92e0d10771b6a6b0e1efcbca0a312c35fe0b4ac1916f30eb0
 wget https://pypi.jetson-ai-lab.dev/jp6/cu126/+f/c00/101424798389f/torchaudio-2.8.0-cp310-cp310-linux_aarch64.whl#sha256=c00101424798389fffa7a3959bf2c564cb92a593e940af0e29bc0bfabd3c562d

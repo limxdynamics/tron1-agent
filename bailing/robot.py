@@ -637,7 +637,7 @@ class Robot(ABC):
             if self.use_llm and len(query)>=3:
                 try:
                     logger.info(self.task_manager.get_functions())
-                    dialogue=[{"role":"system","content":self.system_prompt[self.language]},{"role":"user","content":query+"/no_think"}]
+                    dialogue=[{"role":"system","content":self.system_prompt[self.language]},{"role":"user","content":query}]
                     future = self.executor.submit(self.llm.response_call,dialogue,functions_call=self.task_manager.get_functions())
                     timeout=0
                     while not future.done():
@@ -707,7 +707,6 @@ class Robot(ABC):
                             return []
                     elif os.path.exists(function):
                         self.player.play(function)
-                        response_message=[]
                         continue
                     else:
                         response_message=function
@@ -722,35 +721,36 @@ class Robot(ABC):
                 except Exception as e:
                     logger.info(f"tolls call error:{e}")
                     return []
-        if "noise" in response_message or "噪音" in response_message:
-            return []
-        elif  "function_name" in response_message or "TronAction" in response_message:
-            self.play_preloaded_prompt("unknow")
-            return ["response error,please try again"]
         else:
-            logger.info(f"response_message:{response_message}")
-            try:
-                response_messages= json.loads(response_message.replace("\'","\""))
-                for response_message in response_messages:
-                    if os.path.exists(response_message):
-                        self.player.play(response_message)
-                        response_message=[]
-                    else:
-                        if response_message is None:
-                            response_message=self.prompt[self.language]["noise"]
-                        response_message=self.translator.translate(response_message,self.language)
-                        future = self.executor.submit(self.speak_and_play, response_message)
-                        self.tts_queue.put(future)
-            except:
-                    if os.path.exists(response_message):
-                        self.player.play(response_message)
-                        response_message=[]
-                    else:
-                        if response_message is None:
-                            response_message=self.prompt[self.language]["noise"]
-                        response_message=self.translator.translate(response_message,self.language)
-                        future = self.executor.submit(self.speak_and_play, response_message)
-                        self.tts_queue.put(future)
+            if "noise" in response_message or "噪音" in response_message:
+                return []
+            elif  ("function_name" in response_message or "TronAction" in response_message): 
+                self.play_preloaded_prompt("unknow")
+                return ["response error,please try again"]
+            elif response_message:
+                logger.info(f"response_message:{response_message}")
+                try:
+                    response_messages= json.loads(response_message.replace("\'","\""))
+                    for response_message in response_messages:
+                        if os.path.exists(response_message):
+                            self.player.play(response_message)
+                            response_message=[]
+                        else:
+                            if response_message is None:
+                                response_message=self.prompt[self.language]["noise"]
+                            response_message=self.translator.translate(response_message,self.language)
+                            future = self.executor.submit(self.speak_and_play, response_message)
+                            self.tts_queue.put(future)
+                except:
+                        if os.path.exists(response_message):
+                            self.player.play(response_message)
+                            response_message=[]
+                        else:
+                            if response_message is None:
+                                response_message=self.prompt[self.language]["noise"]
+                            response_message=self.translator.translate(response_message,self.language)
+                            future = self.executor.submit(self.speak_and_play, response_message)
+                            self.tts_queue.put(future)
         return [response_message]
     
     def chat(self, query):
