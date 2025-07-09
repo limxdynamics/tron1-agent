@@ -1,6 +1,7 @@
 Cython
 pandas 
 scipy 
+spacy
 scikit-learn 
 matplotlib
 chattts==0.1.1

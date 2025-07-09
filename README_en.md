@@ -82,8 +82,12 @@ make clean
 cd tools/pynini/pynini-2.1.5.post2
 python setup.py install
 pip install WeTextProcessing==1.0.3 --no-deps
-cd tools/torch
+python -m spacy download zh_core_web_trf
+python -m spacy download en_core_web_trf
 # jetpack6 and cuda12.6
+wget https://pypi.jetson-ai-lab.dev/jp6/cu126/+f/027/bb91e7bccb0b9/torch-2.8.0-cp310-cp310-linux_aarch64.whl#sha256=027bb91e7bccb0b92e0d10771b6a6b0e1efcbca0a312c35fe0b4ac1916f30eb0
+wget https://pypi.jetson-ai-lab.dev/jp6/cu126/+f/c00/101424798389f/torchaudio-2.8.0-cp310-cp310-linux_aarch64.whl#sha256=c00101424798389fffa7a3959bf2c564cb92a593e940af0e29bc0bfabd3c562d
+wget https://pypi.jetson-ai-lab.dev/jp6/cu126/+f/120/67a637fa6d05e/torchvision-0.23.0-cp310-cp310-linux_aarch64.whl#sha256=12067a637fa6d05e5d21e9d1814aaa718c02f8d5aa252d6616277541093d77f2
 pip install torch-2.8.0-cp310-cp310-linux_aarch64.whl
 pip install torchaudio-2.8.0-cp310-cp310-linux_aarch64.whl
 pip install torchvision-0.23.0-cp310-cp310-linux_aarch64.whl

@@ -23,7 +23,7 @@ from bailing import (
     audio_device
 )
 from bailing.dialogue import Message, Dialogue
-from bailing.utils.utils import is_interrupt, read_config,toolsback,clean_content,is_valid,correct_function_content
+from bailing.utils.utils import is_interrupt, read_config,toolsback,clean_content,is_valid,correct_function_content,clean_function_content
 from bailing.utils.prepos_com import preprocess_asr_result
 from plugins.registry import Action
 from plugins.task_manager import TaskManager
@@ -634,7 +634,7 @@ class Robot(ABC):
             self.wake_word_detected = False if self.wakeword is not None else True
             self.silence_status = True
         if functions is None or response_message is None:
-            if self.use_llm and len(query)>3:
+            if self.use_llm and len(query)>=3:
                 try:
                     logger.info(self.task_manager.get_functions())
                     dialogue=[{"role":"system","content":self.system_prompt[self.language]},{"role":"user","content":query+"/no_think"}]
@@ -667,8 +667,11 @@ class Robot(ABC):
                     if function_name and function_arguments:
                         functions.append((function_name, function_arguments))
                 logger.info(f"LLM content：{response_message}")
+                if  "function_name" in response_message:
+                    functions=clean_function_content(response_message)
+                else:
+                    functions=correct_function_content(functions)
                 response_message=clean_content(response_message)
-                functions=correct_function_content(functions)
             else:
                 return []
         if functions:
