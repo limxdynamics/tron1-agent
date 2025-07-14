@@ -1,44 +1,44 @@
 # Tron1-Agent
 
-<span>[ English | <a href="README.md">Chinese</a> ]</span>
+<span>[ 中文 | <a href="README.md">English</a> ]</span>
 
-Real-time voice interaction for Tron robots, supporting chat, action execution, etc.
-## Functional Features
+用于Tron机器人的实时语音交互，支持聊天、和动作执行等。
+## 功能特性
 
-- ** Voice input ** : Accurate voice recognition through FunASR.
-- ** Speech Activity Detection ** : Use silero-vad to filter out invalid audio to enhance recognition efficiency.
-- ** Intelligent Dialogue Generation ** : Rely on the powerful language understanding capabilities provided by LLMS to generate natural text responses.
-- ** Voice output ** : Convert text to voice through edge-tts and other means to provide users with realistic auditory feedback.
-- ** Support for interruption ** : Flexibly configure interruption strategies, capable of identifying keyword and voice interruptions, ensuring immediate feedback and control from users during conversations, and enhancing interaction smoothness.
-- ** Supports memory function **: It has the ability to continuously learn, can remember users' preferences and historical conversations, and provide personalized interactive experiences.
-- ** Support for Tool Invocation **: Flexibly integrate external tools, allowing users to directly request information or perform operations through voice commands, enhancing the practicality of the assistant. It can be expanded at any time
-- ** Support for task Management **: Efficiently manage user tasks, capable of tracking progress, setting reminders, and providing dynamic updates to ensure that users do not miss any important matters.
-- ** Ultra-lightweight application **: This code can be easily run on Jeston Orin NX.
-
+- **语音输入**：通过 FunASR 进行准确的语音识别。
+- **语音活动检测**：使用 silero-vad 过滤无效音频，提升识别效率。
+- **智能对话生成**：依靠 LLM 提供的强大语言理解能力生成自然的文本回复。
+- **语音输出**：通过 edge-tts 等将文本转为语音，为用户提供逼真的听觉反馈。
+- **支持打断**：灵活配置打断策略，能够识别关键字和语音打断，确保用户在对话中的即时反馈与控制，提高交互流畅度。
+- **支持记忆功能**: 具备持续学习能力，能够记忆用户的偏好与历史对话，提供个性化的互动体验。
+- **支持工具调用**: 灵活集成外部工具，用户可通过语音直接请求信息或执行操作，提升助手的实用性。***同时随时可拓展***
+- **支持任务管理**: 高效管理用户任务，能够跟踪进度、设置提醒，并提供动态更新，确保用户不错过任何重要事项。
+- **超轻量级应用**: 在Jeston Orin NX上可以轻松运行该代码。
 ## Roadmap
 
-- [x] Basic voice dialogue function
-- [x] Supports Tron hardware communication
-- [x] supports Tron action execution calls
-- [x] Supports batch action execution and exception termination on Tron
-- [x] Supports both Chinese and English versions of Agent input and response
+- [x] 基本语音对话功能
+- [x] 支持Tron硬件通信
+- [x] 支持Tron动作执行调用
+- [x] 支持Tron批量动作执行和异常中止
+- [x] 支持Agent中英两版输入和响应
 - [x] Memory
-- [x] supports voice wake-up and sleep
-- [x] Preset prompt word template
-- [x] Offline operation
-- [x] Multiple tool calls
+- [x] 支持语音唤醒和休眠
+- [x] 预设提示词模板
+- [x] 离线操作
+- [x] 多种工具调用
 - [x] Rag & Agent
-- [x] interrupted
+- [x] 打断
 
-## Installation Steps
+## 安装步骤
 
-1. Cloning Project Repository
+1. 克隆项目仓库
+
 ```bash
 git clone 
 cd Tron-Agent
 ```
 
-2. Installation dependencies
+2. 安装依赖
 ```bash
 conda create -n tronagent
 conda activate tronagent
@@ -48,13 +48,13 @@ python -m spacy download en_core_web_trf
 pip install WeTextProcessing==1.0.3 #x86
 ```
 
-3. Local deployment of llm
+3. llm本地部署
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
 ollama run modelscope.cn/unsloth/Qwen3-1.7B-GGUF
 ```
 
-4. Download the relevant model
+4. 下载相关模型
 ```bash
 mkdir models && cd models
 modelscope download --model IndexTeam/IndexTTS-1.5 --local_dir tts/indextts
@@ -67,14 +67,14 @@ mkdir -p translation/Helsinki-NLP && cd translation/Helsinki-NLP
 git clone https://huggingface.co/Helsinki-NLP/opus-mt-zh-en
 git clone https://huggingface.co/Helsinki-NLP/opus-mt-en-zh
 cd ../.. && mkdir -p tts/piper && cd tts/piper
-#Relevant model https://huggingface.co/rhasspy/piper-voices/tree/v1.0.0
+#相关模型地址 https://huggingface.co/rhasspy/piper-voices/tree/v1.0.0
 wget https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/en/en_US/amy/medium/en_US-amy-medium.onnx
 wget https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/en/en_US/amy/medium/en_US-amy-medium.onnx.json
 wget https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx
 wget https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx.json
 ```
 
-5. Reliance on arm architecture
+5. arm架构依赖
 ```bash
 cd tools/pynini/openfst-1.8.2
 make clean
@@ -91,22 +91,22 @@ pip install torchaudio-2.8.0-cp310-cp310-linux_aarch64.whl
 pip install torchvision-0.23.0-cp310-cp310-linux_aarch64.whl
 ```
 
-6. Run the project
+6. 运行项目
 ```bash
 python main.py
 ```
 
-7. Auto-start upon startup
+7. 开机自启
 ```bash
 sudo cp tools/auto_start/tronagent.service /etc/systemd/system/tronagent.servce
 sudo systemctl enable tronagent.service
 sudo systemctl daemon-reload
 ```
-***The relevant configuration is under ```config/```***, and can be modified by yourself.
+***相关配置在```config/```下***,可自行修改
 
 # Acknowledgements
 
-The development of this project's code is based on the <a href="https://github.com/wwbin2017/bailing/tree/main/bailing">Bailing</a> framework. We would like to express our special gratitude to the Bailing team for their technical support and open-source foundation. Additionally, sincere thanks go to other models and relevant contributors that have provided assistance in the development of this Agent.
+本项目的代码开发基于<a href="https://github.com/wwbin2017/bailing/tree/main/bailing">百聆（Bailing）</a>框架实现，在此特别感谢百聆团队提供的技术支持与开源基础。同时，也向为本 Agent 开发提供助力的其他模型及相关贡献者致以诚挚谢意。
 
 # References
 
