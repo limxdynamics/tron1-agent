@@ -159,7 +159,7 @@ def correct_function_content(functions):
     functions_new=[]
     for function_name, function_arguments in functions:
         function_arguments=json.loads(function_arguments)
-        if function_arguments["action"]:
+        if function_arguments.get("action",None):
             action=function_arguments["action"]
             function_argument={action:{}}
             for k,v in function_arguments.items():

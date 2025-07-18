@@ -1,5 +1,3 @@
-from email import message
-from email.errors import FirstHeaderLineIsContinuationDefect
 from flask.config import T
 from .base_websocket import BaseWebSocket
 import time
@@ -48,9 +46,6 @@ class TronWebsocket(BaseWebSocket):
             return self.request_walk_mode_with_timeout()
 
     def sit(self):
-        # if self.status == BaseActionType.FALLOVER._value_:
-        #     self.send_request("request_recover")
-        # else:
         self.send_request("request_sitdown")
         start_time = time.time()
         timeout = 10  # 10 seconds timeout

@@ -1,5 +1,4 @@
 import sys
-#sys.path.append("/home/limx/tron/Tron-Agent")
 from plugins.registry import register_function, ToolType, Action, ActionResponse
 import logging
 logger = logging.getLogger(__name__)

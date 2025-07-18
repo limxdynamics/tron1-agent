@@ -7,10 +7,10 @@ After=network.target
 
 [Service]
 # 启动脚本路径（确保脚本有可执行权限：chmod +x start.sh）
-ExecStart=/home/limx/guest/Tron-Agent/start.sh
+ExecStart=/home/limx/guest/tron1-agent/start.sh
 
 # 工作目录（脚本中若使用相对路径，会基于此目录）
-WorkingDirectory=/home/guest/tron/Tron-Agent
+WorkingDirectory=/home/guest/tron/tron1-agent
 
 # 自动重启配置
 Restart=failure

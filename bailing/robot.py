@@ -27,7 +27,7 @@ from bailing.utils.utils import is_interrupt, read_config,toolsback,clean_conten
 from bailing.utils.prepos_com import preprocess_asr_result
 from plugins.registry import Action
 from plugins.task_manager import TaskManager
-from config.prompt import get_prompt_all
+from config.prompt_simple import get_prompt_all
 import os
 logger = logging.getLogger(__name__)
 
@@ -417,6 +417,7 @@ class Robot(ABC):
             # 休眠模式
             if not self.vad_start and not self.player.get_playing_status() and self.chat_lock is False  and not self.silence_status and self.executor._work_queue.qsize() == 0 and not self.speech and self.task_queue.empty():
                 self.start_time = time.time()
+                sleep_flag=False
             while not self.vad_start and not self.player.get_playing_status() and self.chat_lock is False and not self.silence_status and self.executor._work_queue.qsize() == 0 and not self.speech and self.task_queue.empty():
                 data = self.vad_queue.get()
                 vad_status = data.get("vad_statue")
@@ -424,12 +425,12 @@ class Robot(ABC):
                     if self.start_time is None:
                         break
                     # 检查是否需要进入休眠状态
-                    if time.time() - self.start_time== self.sleeptime // 2:
+                    if abs(time.time() - self.start_time-self.sleeptime//2)<0.005 and not sleep_flag:
+                        sleep_flag=True
                         self.play_preloaded_prompt("wait")
-                        self.silence_status=True
                     # 检查是否需要进入休眠状态
-                    if time.time() - self.start_time == self.sleeptime:
-                        self.play_preloaded_prompt("wait")
+                    if abs(time.time() - self.start_time -self.sleeptime)<0.005 and sleep_flag:
+                        self.play_preloaded_prompt("sleep")
                         self.silence_status=True
                 else:
                     break
@@ -569,7 +570,6 @@ class Robot(ABC):
             response=self.llm.response(dialogue)
             response="".join(response).strip('\n')
             response=clean_content(response)
-            logger.info(f"response:{response}")
             future = self.executor.submit(self.speak_and_play, response)
             self.tts_queue.put(future)
             return [response]
@@ -636,7 +636,6 @@ class Robot(ABC):
         if functions is None or response_message is None:
             if self.use_llm and len(query)>=3:
                 try:
-                    logger.info(self.task_manager.get_functions())
                     dialogue=[{"role":"system","content":self.system_prompt[self.language]},{"role":"user","content":query+"/no_think"}]
                     future = self.executor.submit(self.llm.response_call,dialogue,functions_call=self.task_manager.get_functions())
                     timeout=0
@@ -654,24 +653,26 @@ class Robot(ABC):
                 functions=[]
                 response_message = ""
                 for chunk in llm_responses:
-                    function_arguments = ""
-                    function_name = None
-                    content, tools_call = chunk
-                    if tools_call is not None:
-                        if tools_call[0].function.name is not None:
-                            function_name = tools_call[0].function.name
-                        if tools_call[0].function.arguments is not None:
-                            function_arguments = tools_call[0].function.arguments
+                    content, tools_calls = chunk
+                    if tools_calls is not None:
+                        for tools_call in tools_calls:
+                            function_arguments = ""
+                            function_name = None
+                            if tools_call.function is not None and tools_call.function.name is not None:
+                                function_name = tools_call.function.name
+                            if tools_call.function is not None and tools_call.function.arguments is not None:
+                                function_arguments = tools_call.function.arguments
+                            if function_name and function_arguments:
+                                functions.append((function_name, function_arguments))
                     if content is not None and len(content) > 0:
                         response_message+=content
-                    if function_name and function_arguments:
-                        functions.append((function_name, function_arguments))
-                logger.info(f"LLM content：{response_message}")
                 if  "function_name" in response_message:
                     functions=clean_function_content(response_message)
                 else:
                     functions=correct_function_content(functions)
                 response_message=clean_content(response_message)
+                logger.info(f"LLM content：{response_message}")
+                logger.info(f"functions content：{functions}")
             else:
                 return []
         if functions:
@@ -688,6 +689,7 @@ class Robot(ABC):
                     action_len+=1
             if len(functions)==action_len:
                 self.play_preloaded_prompt("exe")
+                response_message=self.prompt[self.language]["exe"]
             for function in functions:
                 logger.debug(f"function:{function}")
                 if not self.chat_lock:
@@ -755,8 +757,8 @@ class Robot(ABC):
     
     def chat(self, query):
         self.dialogue.put(Message(role="user", content=query))
-        response_message = []
         self.chat_lock = True
+        response_message=[]
         if self.start_task_mode:
             response_message = self.chat_tool_by_content(query)
         else:
@@ -781,6 +783,7 @@ class Robot(ABC):
         if not response_message:
             self.wake_word_detected = True
             self.silence_status = False
+            self.dialogue.dialogue.pop()
         logger.debug(json.dumps(self.dialogue.get_llm_dialogue(), indent=4, ensure_ascii=False))
         return True
 

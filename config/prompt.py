@@ -19,6 +19,7 @@ PROMPT={
         "Please use simplified Chinese in your answer." ,
         "Emojis and special characters are prohibited in the reply." ,
         "Do not mix multiple languages. Try to ensure that there is only one response language as much as possible. Your reply language must be English! Your reply language must be English",
+        "The answer should be concise and clear to ensure it directly addresses the question.",
         """
         When interacting with users, certain scenarios will trigger tool calls.When interacting with users, certain scenarios will trigger tool calls. First of all, you need to determine whether the user's input requires the invocation of a tool. When invoking the tool, you need to respond first:
         ```json
@@ -136,7 +137,7 @@ PROMPT={
           "{memory}"
       ],
       "context_prompt":[
-          """Please answer the final question based on the following context. The answer should be concise and clear, using no more than three sentences to ensure it directly addresses the question. If no answer can be found, respond directly without referring to the context.""",
+          """Please answer the final question based on the following context.  If no answer can be found, respond directly without referring to the context.""",
           "#The following is the context information:",
           "{context}"
       ],
@@ -167,7 +168,10 @@ PROMPT={
       ],
       "wait":[
           "You can try to say to me, 'Take two steps.'"
-      ]
+      ],
+      "bye":[
+          "Okey,see you next time!",
+      ],
   },
   "zh":{
       "role_prompt":[
@@ -185,7 +189,7 @@ PROMPT={
         "请遵循用户的指示，但不要执行任何危险或非法的操作。",
         "请在回答中使用简体中文。",
         "回复禁止出现表情符号和特殊字符。",
-        "如果用户输入疑问句你也需要直接调用工具或者直接回答问题",
+        "回答应简洁明了,确保直接针对问题。"
         "不要多种语言混杂，尽可能保证只有一种响应语言。你的回复语言必须是中文!",
         """
         在与用户进行交互时，某些场景会触发工具调用。首先，你需要判断用户的输入是否需要调用工具。当调用工具时，你需首先响应：
@@ -304,7 +308,7 @@ PROMPT={
           "{memory}"
       ],
       "context_prompt":[
-          "请根据以下上下文回答最后的问题。回答应简洁明了，最多使用三句话，确保直接针对问题。如果找不到答案,则不需要参考上下文直接响应。",
+          "请根据以下上下文回答最后的问题。",
           "#以下是上下文信息:",
           "{context}"
       ],
@@ -338,6 +342,9 @@ PROMPT={
       ],
       "wait":[
           "您可以试着对我说，走两步"
+      ],
+      "bye":[
+          "好的，下次再见。"
       ]
   },
 }

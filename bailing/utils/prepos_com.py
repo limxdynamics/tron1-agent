@@ -200,7 +200,7 @@ def preprocess_asr_result(asr_result, language="zh",):
                     # 检查是否包含步数信息
                     step_match = re.search(r"(\d+)步|(\d+) steps|(\d+) step|(\d+)圈|(\d+) circles|(\d+) circle|(\d+) centermiters|(\d+) centermiter|(\d+) 厘米", tmp+remaining_text)
                     if step_match and ("twist" in action[0]["args"] or "height" in action[0]["args"]):
-                        step_str = step_match.group(1) or step_match.group(2) or step_match.group(3) or step_match.group(4) or step_match.group(5) or step_match.group(6)
+                        step_str = step_match.group(1) or step_match.group(2) or step_match.group(3) or step_match.group(4) or step_match.group(5) or step_match.group(6) or step_match.group(7) or step_match.group(8)or step_match.group(9)
                         start_index, end_index = step_match.span()  # 获取匹配文本的起始和结束索引
                         step_str = re.sub(r'[^\w]', '', step_str)  # 移除非字母数字字符
                         if step_str.isdigit():

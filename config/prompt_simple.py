@@ -34,7 +34,7 @@ PROMPT={
           "{memory}"
       ],
       "context_prompt":[
-          """Please answer the final question based on the following context. The answer should be concise and clear, using no more than three sentences to ensure it directly addresses the question. If no answer can be found, respond directly without referring to the context.""",
+          """Please answer the final question based on the following context. """,
           "#The following is the context information:",
           "{context}"
       ],
@@ -108,7 +108,7 @@ PROMPT={
           "{memory}"
       ],
       "context_prompt":[
-          "请根据以下上下文回答最后的问题。回答应简洁明了，最多使用三句话，确保直接针对问题。如果找不到答案,则不需要参考上下文直接响应。",
+          "请根据以下上下文回答最后的问题。",
           "#以下是上下文信息:",
           "{context}"
       ],

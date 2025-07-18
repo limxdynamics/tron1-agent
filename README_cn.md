@@ -1,6 +1,6 @@
 # Tron1-Agent
 
-<span>[ 中文 | <a href="README.md">English</a> ]</span>
+<span>[ 中文 | <a href="README_en.md">English</a> ]</span>
 
 用于Tron机器人的实时语音交互，支持聊天、和动作执行等。
 ## 功能特性
@@ -43,9 +43,8 @@ cd Tron-Agent
 conda create -n tronagent
 conda activate tronagent
 pip install -r requirments.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
-python -m spacy download zh_core_web_trf
-python -m spacy download en_core_web_trf
-pip install WeTextProcessing==1.0.3 #x86
+pip install pynini==2.1.5 -i https://pypi.tuna.tsinghua.edu.cn/simple #x86
+pip install WeTextProcessing==1.0.3 -i https://pypi.tuna.tsinghua.edu.cn/simple #x86
 ```
 
 3. llm本地部署
@@ -57,7 +56,6 @@ ollama run modelscope.cn/unsloth/Qwen3-1.7B-GGUF
 4. 下载相关模型
 ```bash
 mkdir models && cd models
-modelscope download --model IndexTeam/IndexTTS-1.5 --local_dir tts/indextts
 modelscope download --model iic/SenseVoiceSmall --local_dir SenseVoiceSmall
 modelscope download --model BAAI/bge-small-zh --local_dir rag/bge-small-zh
 modelscope download --model BAAI/bge-small-en --local_dir rag/bge-small-en
@@ -76,19 +74,30 @@ wget https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/zh/zh_CN/huayan/med
 
 5. arm架构依赖
 ```bash
-cd tools/pynini/openfst-1.8.2
-make clean
-./configure --enable-grm --enable-static --enable-shared  && make -j$(nproc) && make install && sudo ldconfig 
-cd tools/pynini/pynini-2.1.5.post2
-python setup.py install
-pip install WeTextProcessing==1.0.3 --no-deps
+mkdir /home/guest/tron/tron1-agent/tools/pynini && cd /home/guest/tron/tron1-agent/tools/pynini
+wget  https://www.openfst.org/twiki/pub/FST/FstDownload/openfst-1.8.2.tar.gz  &&  tar -zxvf openfst-1.8.2.tar.gz && cd openfst-1.8.2
+./configure --enable-grm --enable-static --enable-shared --host=arm-linux-gnueabihf && make -j$(nproc) && make install && sudo ldconfig
+echo 'export CPLUS_INCLUDE_PATH="/usr/local/include:$CPLUS_INCLUDE_PATH"' >> ~/.bashrc
+echo 'export LIBRARY_PATH="/usr/local/lib:$LIBRARY_PATH"' >> ~/.bashrc
+echo 'export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"' >> ~/.bashrc
+source ~/.bashrc
+pip install Cython==3.1.2 setuptools==62.3.4 wheel==0.45.1
+pip install pynini==2.1.5 -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install WeTextProcessing==1.0.3 --no-deps -i https://pypi.tuna.tsinghua.edu.cn/simple
+mkdir /home/guest/tron/tron1-agent/tools/torch && cd /home/guest/tron/tron1-agent/tools/torch
 # jetpack6 and cuda12.6
-wget https://pypi.jetson-ai-lab.dev/jp6/cu126/+f/027/bb91e7bccb0b9/torch-2.8.0-cp310-cp310-linux_aarch64.whl#sha256=027bb91e7bccb0b92e0d10771b6a6b0e1efcbca0a312c35fe0b4ac1916f30eb0
-wget https://pypi.jetson-ai-lab.dev/jp6/cu126/+f/c00/101424798389f/torchaudio-2.8.0-cp310-cp310-linux_aarch64.whl#sha256=c00101424798389fffa7a3959bf2c564cb92a593e940af0e29bc0bfabd3c562d
-wget https://pypi.jetson-ai-lab.dev/jp6/cu126/+f/120/67a637fa6d05e/torchvision-0.23.0-cp310-cp310-linux_aarch64.whl#sha256=12067a637fa6d05e5d21e9d1814aaa718c02f8d5aa252d6616277541093d77f2
+wget https://github.com/limxdynamics/tron1-agent/releases/download/v1.0.0/torch-2.8.0-cp310-cp310-linux_aarch64.whl
+wget https://github.com/limxdynamics/tron1-agent/releases/download/v1.0.0/torchaudio-2.8.0-cp310-cp310-linux_aarch64.whl
+wget https://github.com/limxdynamics/tron1-agent/releases/download/v1.0.0/torchvision-0.23.0-cp310-cp310-linux_aarch64.whl
 pip install torch-2.8.0-cp310-cp310-linux_aarch64.whl
 pip install torchaudio-2.8.0-cp310-cp310-linux_aarch64.whl
 pip install torchvision-0.23.0-cp310-cp310-linux_aarch64.whl
+mkdir /home/guest/tron/tron1-agent/tools/spacy && cd /home/guest/tron/tron1-agent/tools/spacy
+wget https://github.com/limxdynamics/tron1-agent/releases/download/v1.0.0/en_core_web_trf-3.8.0-py3-none-any.whl
+wget https://github.com/limxdynamics/tron1-agent/releases/download/v1.0.0/zh_core_web_trf-3.8.0-py3-none-any.whl
+pip install en_core_web_trf-3.8.0-py3-none-any.whl
+pip install zh_core_web_trf-3.8.0-py3-none-any.whl -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install scipy --upgrade -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 6. 运行项目

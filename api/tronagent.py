@@ -1,11 +1,11 @@
 from bailing import tts
-from bailing.utils import read_config
+from bailing.utils.utils import read_config
 from flask import Blueprint,request,jsonify,send_file
 import os
 
 tts_model=None
 _config = read_config("api/config.yaml")
-
+current_dir = os.getcwd()
 tronagent = Blueprint('visa', __name__)
 
 
@@ -40,7 +40,7 @@ def Get_TTS():
             return jsonify({"status": "Error", "message": "Audio file not found"})
 
         # 返回音频文件
-        return send_file(tmp_file, mimetype="audio/wav", as_attachment=True, download_name=tmp_file)
+        return send_file(os.path.join(current_dir,tmp_file), mimetype="audio/wav", as_attachment=True, download_name=tmp_file)
 
     except Exception as e:
         # 如果发生错误，返回错误信息

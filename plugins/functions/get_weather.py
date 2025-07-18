@@ -32,16 +32,7 @@ def GetWeather(**kwargs):
     # 将数字转换为周几的名称
     weekdays = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
     current_weekday = weekdays[weekday]
-    # 提取当前周几的天气状况
-    weather_data = response['data']['data']
-    current_weather = next((item for item in weather_data if item['date'] == current_weekday), None)
-    adv=""
-    if "雨" in current_weather['weather']:
-        adv="出门记得带伞哦"
-    if "晴" in current_weather['weather']:
-        adv="今天是个好天气，适合出去走走，但要注意防晒哦"
-    res=f"今天{date_format},{current_weekday},天气{current_weather['weather']}，气温{current_weather['temperature']}，空气质量{current_weather['air_quality']},{adv}"
-    return ActionResponse(Action.RESPONSE, None,res)
+    return ActionResponse(Action.REQLLM, f"今天{date_format},{current_weekday},天气信息为：{response}", None)
 
 
 def get_current_city():
