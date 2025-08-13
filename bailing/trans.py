@@ -104,7 +104,7 @@ if __name__=="__main__":
         "translator":"alibaba",
         "from_language":"Chinese",
         "to_language":"English",
-        "model_dir":"../weights/translation/Helsinki-NLP"
+        "model_dir":"../models/translation/Helsinki-NLP"
     }
     # translator = Translators(config)
     # trans_text=translator.translate(translated_text)

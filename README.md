@@ -66,10 +66,10 @@ git clone https://huggingface.co/Helsinki-NLP/opus-mt-zh-en
 git clone https://huggingface.co/Helsinki-NLP/opus-mt-en-zh
 cd ../.. && mkdir -p tts/piper && cd tts/piper
 #Relevant model https://huggingface.co/rhasspy/piper-voices/tree/v1.0.0
-wget https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/en/en_US/amy/medium/en_US-amy-medium.onnx
-wget https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/en/en_US/amy/medium/en_US-amy-medium.onnx.json
-wget https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx
-wget https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx.json
+wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/amy/medium/en_US-amy-medium.onnx
+wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/amy/medium/en_US-amy-medium.onnx.json
+wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx
+wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx.json
 ```
 
 5. Reliance on arm architecture
@@ -121,7 +121,7 @@ The development of this project's code is based on the <a href="https://github.c
 
 <a href="https://github.com/wwbin2017/bailing/tree/main/bailing">百聆</a>
 
-<a href="https://github.com/rhasspy/piper/blob/master/src/python_run">Piper TTS</a>
+<a href="https://github.com/rhasspy/piper/resolve/master/src/python_run">Piper TTS</a>
 
 <a href="https://github.com/modelscope/FunASR">FunASR</a>
 

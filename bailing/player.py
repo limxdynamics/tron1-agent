@@ -21,7 +21,7 @@ class AbstractPlayer(object):
         self.is_playing = False
         self.play_queue = queue.Queue()
         self._stop_event = threading.Event()
-        self.consumer_thread = threading.Thread(target=self._playing)
+        self.consumer_thread = threading.Thread(target=self._playing, daemon=True)
         self.consumer_thread.start()
 
     @staticmethod

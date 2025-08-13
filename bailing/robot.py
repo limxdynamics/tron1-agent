@@ -365,21 +365,21 @@ class Robot(ABC):
                 for task in tasks:
                     task.cancel()
             
-            # 清空TTS队列
-            while not self.tts_queue.empty():
-                try:
-                    future = self.tts_queue.get()
-                    if future and not future.done():
-                        future.cancel()
-                except queue.Empty:
-                    break
-            while not self.player.play_queue.empty():
-                try:
-                    future = self.player.play_queue.get()
-                    if future and not future.done():
-                        future.cancel()
-                except queue.Empty:
-                    break
+        # 清空TTS队列
+        while not self.tts_queue.empty():
+            try:
+                future = self.tts_queue.get()
+                if future and not future.done():
+                    future.cancel()
+            except queue.Empty:
+                break
+        while not self.player.play_queue.empty():
+            try:
+                future = self.player.play_queue.get()
+                if future and not future.done():
+                    future.cancel()
+            except queue.Empty:
+                break
                     
         # 停止TTS相关线程
         if hasattr(self, 'tts_priority_thread') and self.tts_priority_thread.is_alive():
@@ -391,8 +391,8 @@ class Robot(ABC):
         # 检测唤醒词
         if self.device_wakeup:
             lang,is_wakeup = self._detect_wake_word()
-            self.language=lang
             if self.wakeword and is_wakeup:
+                self.language=lang
                 self.device_wakeup=True
                 self.wakeup_interrupt()
                 logger.info("Detected wake word to waking up")

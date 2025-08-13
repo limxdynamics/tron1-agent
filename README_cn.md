@@ -66,10 +66,10 @@ git clone https://huggingface.co/Helsinki-NLP/opus-mt-zh-en
 git clone https://huggingface.co/Helsinki-NLP/opus-mt-en-zh
 cd ../.. && mkdir -p tts/piper && cd tts/piper
 #相关模型地址 https://huggingface.co/rhasspy/piper-voices/tree/v1.0.0
-wget https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/en/en_US/amy/medium/en_US-amy-medium.onnx
-wget https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/en/en_US/amy/medium/en_US-amy-medium.onnx.json
-wget https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx
-wget https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx.json
+wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/amy/medium/en_US-amy-medium.onnx
+wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/amy/medium/en_US-amy-medium.onnx.json
+wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx
+wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx.json
 ```
 
 5. arm架构依赖
@@ -121,7 +121,7 @@ sudo systemctl daemon-reload
 
 <a href="https://github.com/wwbin2017/bailing/tree/main/bailing">百聆</a>
 
-<a href="https://github.com/rhasspy/piper/blob/master/src/python_run">Piper TTS</a>
+<a href="https://github.com/rhasspy/piper/resolve/master/src/python_run">Piper TTS</a>
 
 <a href="https://github.com/modelscope/FunASR">FunASR</a>
 
