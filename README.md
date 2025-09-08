@@ -5,15 +5,15 @@
 Real-time voice interaction for Tron robots, supporting chat, action execution, etc.
 ## Functional Features
 
-- ** Voice input ** : Accurate voice recognition through FunASR.
-- ** Speech Activity Detection ** : Use silero-vad to filter out invalid audio to enhance recognition efficiency.
-- ** Intelligent Dialogue Generation ** : Rely on the powerful language understanding capabilities provided by LLMS to generate natural text responses.
-- ** Voice output ** : Convert text to voice through edge-tts and other means to provide users with realistic auditory feedback.
-- ** Support for interruption ** : Flexibly configure interruption strategies, capable of identifying keyword and voice interruptions, ensuring immediate feedback and control from users during conversations, and enhancing interaction smoothness.
-- ** Supports memory function **: It has the ability to continuously learn, can remember users' preferences and historical conversations, and provide personalized interactive experiences.
-- ** Support for Tool Invocation **: Flexibly integrate external tools, allowing users to directly request information or perform operations through voice commands, enhancing the practicality of the assistant. It can be expanded at any time
-- ** Support for task Management **: Efficiently manage user tasks, capable of tracking progress, setting reminders, and providing dynamic updates to ensure that users do not miss any important matters.
-- ** Ultra-lightweight application **: This code can be easily run on Jeston Orin NX.
+- **Voice input** : Accurate voice recognition through FunASR.
+- **Speech Activity Detection** : Use silero-vad to filter out invalid audio to enhance recognition efficiency.
+- **Intelligent Dialogue Generation** : Rely on the powerful language understanding capabilities provided by LLMS to generate natural text responses.
+- **Voice output** : Convert text to voice through edge-tts and other means to provide users with realistic auditory feedback.
+- **Support for interruption** : Flexibly configure interruption strategies, capable of identifying keyword and voice interruptions, ensuring immediate feedback and control from users during conversations, and enhancing interaction smoothness.
+- **Supports memory function**: It has the ability to continuously learn, can remember users' preferences and historical conversations, and provide personalized interactive experiences.
+- **Support for Tool Invocation**: Flexibly integrate external tools, allowing users to directly request information or perform operations through voice commands, enhancing the practicality of the assistant. It can be expanded at any time
+- **Support for task Management**: Efficiently manage user tasks, capable of tracking progress, setting reminders, and providing dynamic updates to ensure that users do not miss any important matters.
+- **Ultra-lightweight application**: This code can be easily run on Jeston Orin NX.
 
 ## Roadmap
 
