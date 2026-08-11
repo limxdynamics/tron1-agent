@@ -1,6 +1,6 @@
-# Tron1-Agent
+# English | [中文](README_cn.md)
 
-<span>[ English | <a href="README_cn.md">Chinese</a> ]</span>
+# Tron1-Agent
 
 Real-time voice interaction for Tron robots, supporting chat, action execution, etc.
 ## Functional Features
