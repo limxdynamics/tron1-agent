@@ -1,6 +1,6 @@
-# Tron1-Agent
+# 中文 | [English](README.md)
 
-<span>[ 中文 | <a href="README_en.md">English</a> ]</span>
+# Tron1-Agent
 
 用于Tron机器人的实时语音交互，支持聊天、和动作执行等。
 ## 功能特性
