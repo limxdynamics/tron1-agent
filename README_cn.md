@@ -1,125 +1,182 @@
 # 中文 | [English](README.md)
 
-# Tron1-Agent
+<p align="center">
+  <img src="doc/banner_zh.png" alt="tron1-agent：你说“小创小创，往前走两步”，TRON1 向前走两步并回答" width="100%">
+</p>
 
-> 🧭 **TRON1 开源生态的一部分。** TRON1 全部开源仓库和上手路线：[TRON1 开源生态](https://github.com/limxdynamics/tron1-rl-isaacgym/blob/master/README_cn.md#tron1-开源生态)。
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2f6feb" alt="License: MIT"></a>
+  <img src="https://img.shields.io/badge/python-3.10-2f6feb" alt="Python 3.10">
+  <img src="https://img.shields.io/badge/runs%20on-Jetson%20Orin%20NX-2f6feb" alt="Runs on Jetson Orin NX">
+  <img src="https://img.shields.io/badge/LLM-Qwen3--1.7B%20%C2%B7%20Ollama-2f6feb" alt="LLM: Qwen3-1.7B on Ollama">
+</p>
 
-用于Tron机器人的实时语音交互，支持聊天、和动作执行等。
-## 功能特性
+# tron1-agent
 
-- **语音输入**：通过 FunASR 进行准确的语音识别。
-- **语音活动检测**：使用 silero-vad 过滤无效音频，提升识别效率。
-- **智能对话生成**：依靠 LLM 提供的强大语言理解能力生成自然的文本回复。
-- **语音输出**：通过 edge-tts 等将文本转为语音，为用户提供逼真的听觉反馈。
-- **支持打断**：灵活配置打断策略，能够识别关键字和语音打断，确保用户在对话中的即时反馈与控制，提高交互流畅度。
-- **支持记忆功能**: 具备持续学习能力，能够记忆用户的偏好与历史对话，提供个性化的互动体验。
-- **支持工具调用**: 灵活集成外部工具，用户可通过语音直接请求信息或执行操作，提升助手的实用性。***同时随时可拓展***
-- **支持任务管理**: 高效管理用户任务，能够跟踪进度、设置提醒，并提供动态更新，确保用户不错过任何重要事项。
-- **超轻量级应用**: 在Jeston Orin NX上可以轻松运行该代码。
-## Roadmap
+逐际动力 **TRON1** 机器人的实时语音智能体。对它说一句话，TRON1 会用语音回答，或者直接执行：站立、坐下、行走、转向、调整高度、切换灯光。语音识别、大模型和语音合成全部在机器人的 Jetson Orin NX 上本地运行。
 
-- [x] 基本语音对话功能
-- [x] 支持Tron硬件通信
-- [x] 支持Tron动作执行调用
-- [x] 支持Tron批量动作执行和异常中止
-- [x] 支持Agent中英两版输入和响应
-- [x] Memory
-- [x] 支持语音唤醒和休眠
-- [x] 预设提示词模板
-- [x] 离线操作
-- [x] 多种工具调用
-- [x] Rag & Agent
-- [x] 打断
+> **TRON1 开源生态的一部分。** TRON1 全部开源仓库和上手路线：[TRON1 开源生态](https://github.com/limxdynamics/tron1-rl-isaacgym/blob/master/README_cn.md#tron1-开源生态)。
 
-## 安装步骤
+## 亮点
 
-1. 克隆项目仓库
+- **说话就能动。** 大模型把请求转成 `TronAction` 工具调用：站立、坐下、按指定步数行走或转向、机身升高或降低 5 cm、21 种灯效任选。可以连续执行多个动作，执行中也能中止。
+- **完全离线。** 语音识别用 FunASR（SenseVoiceSmall），对话和工具调用用 Ollama 上的 Qwen3-1.7B，语音合成用 Piper，不依赖云服务。
+- **唤醒与打断。** 通过麦克风阵列或语音说“小创小创” / “hey chuang”唤醒；它说话时再说一次唤醒词即可打断。
+- **中英双语。** `Language` 设为 `zh` 或 `en`，需要时用 Helsinki-NLP 模型翻译回复。
+- **知识与记忆。** 回答会参考 `documents/` 下的 `.txt` 文件（RAG），并记住之前对话中的信息（`tmp/memory.json`）。
+- **工具可扩展。** 增加一份函数描述和一个 Python 文件，就能给智能体加新技能（见[添加工具](#添加工具)）。
 
-```bash
-git clone 
-cd Tron-Agent
-```
+## 工作原理
+
+<p align="center">
+  <img src="doc/pipeline_zh.png" alt="唤醒词、语音活动检测、语音识别、本地大模型；大模型调用 TronAction 经 WebSocket 把请求发给 TRON1，或通过 Piper TTS 语音回复" width="100%">
+</p>
+
+机器人通过 WebSocket `ws://<robot_ip>:5000` 连接（[config/config.yaml](config/config.yaml) 中的 `Communication.robot_ip`）。录音、语音识别、语音活动检测、大模型、语音合成、播放、翻译各模块都在同一文件的 `selected_module` 中选择。
+
+## 安装
+
+以下命令假设仓库位于 `/home/guest/tron/tron1-agent`，这也是 [start.sh](start.sh) 和[开机自启服务](tools/auto_start/tronagent.service)使用的路径。
+
+1. 克隆仓库
+
+   ```bash
+   git clone https://github.com/limxdynamics/tron1-agent.git /home/guest/tron/tron1-agent
+   cd /home/guest/tron/tron1-agent
+   ```
 
 2. 安装依赖
+
+   ```bash
+   conda create -n tronagent python=3.10
+   conda activate tronagent
+   pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+   pip install pynini==2.1.5 -i https://pypi.tuna.tsinghua.edu.cn/simple            # 仅 x86，ARM 见第 5 步
+   pip install WeTextProcessing==1.0.3 -i https://pypi.tuna.tsinghua.edu.cn/simple  # 仅 x86
+   ```
+
+3. 本地部署大模型
+
+   ```bash
+   curl -fsSL https://ollama.com/install.sh | sh
+   ollama run modelscope.cn/unsloth/Qwen3-1.7B-GGUF
+   ```
+
+4. 下载模型到 `models/`
+
+   ```bash
+   mkdir -p models && cd models
+   modelscope download --model iic/SenseVoiceSmall --local_dir SenseVoiceSmall
+   modelscope download --model BAAI/bge-small-zh --local_dir rag/bge-small-zh
+   modelscope download --model BAAI/bge-small-en --local_dir rag/bge-small-en
+   modelscope download --model iic/speech_fsmn_vad_zh-cn-16k-common-pytorch --local_dir fsmn_vad
+   git lfs install
+   mkdir -p translation/Helsinki-NLP && cd translation/Helsinki-NLP
+   git clone https://huggingface.co/Helsinki-NLP/opus-mt-zh-en
+   git clone https://huggingface.co/Helsinki-NLP/opus-mt-en-zh
+   cd ../.. && mkdir -p tts/piper && cd tts/piper
+   # 相关模型地址 https://huggingface.co/rhasspy/piper-voices/tree/v1.0.0
+   wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/amy/medium/en_US-amy-medium.onnx
+   wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/amy/medium/en_US-amy-medium.onnx.json
+   wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx
+   wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx.json
+   ```
+
+5. 仅 ARM（Jetson，JetPack 6、CUDA 12.6）：编译 pynini 依赖的 OpenFst，并安装 [v1.0.0 Release](https://github.com/limxdynamics/tron1-agent/releases/tag/v1.0.0) 中的 PyTorch 和 spaCy wheel
+
+   ```bash
+   cd /home/guest/tron/tron1-agent && mkdir -p tools/pynini && cd tools/pynini
+   wget https://www.openfst.org/twiki/pub/FST/FstDownload/openfst-1.8.2.tar.gz && tar -zxvf openfst-1.8.2.tar.gz && cd openfst-1.8.2
+   ./configure --enable-grm --enable-static --enable-shared --host=arm-linux-gnueabihf && make -j$(nproc) && make install && sudo ldconfig
+   echo 'export CPLUS_INCLUDE_PATH="/usr/local/include:$CPLUS_INCLUDE_PATH"' >> ~/.bashrc
+   echo 'export LIBRARY_PATH="/usr/local/lib:$LIBRARY_PATH"' >> ~/.bashrc
+   echo 'export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"' >> ~/.bashrc
+   source ~/.bashrc
+   pip install Cython==3.1.2 setuptools==62.3.4 wheel==0.45.1
+   pip install pynini==2.1.5 -i https://pypi.tuna.tsinghua.edu.cn/simple
+   pip install WeTextProcessing==1.0.3 --no-deps -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+   cd /home/guest/tron/tron1-agent && mkdir -p tools/torch && cd tools/torch
+   wget https://github.com/limxdynamics/tron1-agent/releases/download/v1.0.0/torch-2.8.0-cp310-cp310-linux_aarch64.whl
+   wget https://github.com/limxdynamics/tron1-agent/releases/download/v1.0.0/torchaudio-2.8.0-cp310-cp310-linux_aarch64.whl
+   wget https://github.com/limxdynamics/tron1-agent/releases/download/v1.0.0/torchvision-0.23.0-cp310-cp310-linux_aarch64.whl
+   pip install torch-2.8.0-cp310-cp310-linux_aarch64.whl torchaudio-2.8.0-cp310-cp310-linux_aarch64.whl torchvision-0.23.0-cp310-cp310-linux_aarch64.whl
+
+   cd /home/guest/tron/tron1-agent && mkdir -p tools/spacy && cd tools/spacy
+   wget https://github.com/limxdynamics/tron1-agent/releases/download/v1.0.0/en_core_web_trf-3.8.0-py3-none-any.whl
+   wget https://github.com/limxdynamics/tron1-agent/releases/download/v1.0.0/zh_core_web_trf-3.8.0-py3-none-any.whl
+   pip install en_core_web_trf-3.8.0-py3-none-any.whl
+   pip install zh_core_web_trf-3.8.0-py3-none-any.whl -i https://pypi.tuna.tsinghua.edu.cn/simple
+   pip install scipy --upgrade -i https://pypi.tuna.tsinghua.edu.cn/simple
+   ```
+
+6. 麦克风阵列（设备唤醒）：添加 udev 规则，把它映射为 `/dev/wheeltec_mic`
+
+   ```bash
+   cd /home/guest/tron/tron1-agent && sudo bash tools/iflytek/iflytek.sh
+   ```
+
+## 使用
+
+启动智能体（Ollama 需已在运行，见第 3 步）：
+
 ```bash
-conda create -n tronagent
-conda activate tronagent
-pip install -r requirments.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
-pip install pynini==2.1.5 -i https://pypi.tuna.tsinghua.edu.cn/simple #x86
-pip install WeTextProcessing==1.0.3 -i https://pypi.tuna.tsinghua.edu.cn/simple #x86
+python main.py                      # 使用 config/config.yaml
+python main.py --config_path <文件>  # 使用其他配置
 ```
 
-3. llm本地部署
-```bash
-curl -fsSL https://ollama.com/install.sh | sh
-ollama run modelscope.cn/unsloth/Qwen3-1.7B-GGUF
-```
+可选：`python server/server.py` 会在 `http://<主机>:50001` 提供一个实时显示对话的网页（`web_enable: true`）。
 
-4. 下载相关模型
-```bash
-mkdir models && cd models
-modelscope download --model iic/SenseVoiceSmall --local_dir SenseVoiceSmall
-modelscope download --model BAAI/bge-small-zh --local_dir rag/bge-small-zh
-modelscope download --model BAAI/bge-small-en --local_dir rag/bge-small-en
-modelscope download --model iic/speech_fsmn_vad_zh-cn-16k-common-pytorch --local_dir fsmn_vad
-git lfs install
-mkdir -p translation/Helsinki-NLP && cd translation/Helsinki-NLP
-git clone https://huggingface.co/Helsinki-NLP/opus-mt-zh-en
-git clone https://huggingface.co/Helsinki-NLP/opus-mt-en-zh
-cd ../.. && mkdir -p tts/piper && cd tts/piper
-#相关模型地址 https://huggingface.co/rhasspy/piper-voices/tree/v1.0.0
-wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/amy/medium/en_US-amy-medium.onnx
-wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/amy/medium/en_US-amy-medium.onnx.json
-wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx
-wget https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx.json
-```
+开机自启（依次启动 Ollama、麦克风规则和 `main.py`，见 [start.sh](start.sh)）：
 
-5. arm架构依赖
 ```bash
-mkdir /home/guest/tron/tron1-agent/tools/pynini && cd /home/guest/tron/tron1-agent/tools/pynini
-wget  https://www.openfst.org/twiki/pub/FST/FstDownload/openfst-1.8.2.tar.gz  &&  tar -zxvf openfst-1.8.2.tar.gz && cd openfst-1.8.2
-./configure --enable-grm --enable-static --enable-shared --host=arm-linux-gnueabihf && make -j$(nproc) && make install && sudo ldconfig
-echo 'export CPLUS_INCLUDE_PATH="/usr/local/include:$CPLUS_INCLUDE_PATH"' >> ~/.bashrc
-echo 'export LIBRARY_PATH="/usr/local/lib:$LIBRARY_PATH"' >> ~/.bashrc
-echo 'export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"' >> ~/.bashrc
-source ~/.bashrc
-pip install Cython==3.1.2 setuptools==62.3.4 wheel==0.45.1
-pip install pynini==2.1.5 -i https://pypi.tuna.tsinghua.edu.cn/simple
-pip install WeTextProcessing==1.0.3 --no-deps -i https://pypi.tuna.tsinghua.edu.cn/simple
-mkdir /home/guest/tron/tron1-agent/tools/torch && cd /home/guest/tron/tron1-agent/tools/torch
-# jetpack6 and cuda12.6
-wget https://github.com/limxdynamics/tron1-agent/releases/download/v1.0.0/torch-2.8.0-cp310-cp310-linux_aarch64.whl
-wget https://github.com/limxdynamics/tron1-agent/releases/download/v1.0.0/torchaudio-2.8.0-cp310-cp310-linux_aarch64.whl
-wget https://github.com/limxdynamics/tron1-agent/releases/download/v1.0.0/torchvision-0.23.0-cp310-cp310-linux_aarch64.whl
-pip install torch-2.8.0-cp310-cp310-linux_aarch64.whl
-pip install torchaudio-2.8.0-cp310-cp310-linux_aarch64.whl
-pip install torchvision-0.23.0-cp310-cp310-linux_aarch64.whl
-mkdir /home/guest/tron/tron1-agent/tools/spacy && cd /home/guest/tron/tron1-agent/tools/spacy
-wget https://github.com/limxdynamics/tron1-agent/releases/download/v1.0.0/en_core_web_trf-3.8.0-py3-none-any.whl
-wget https://github.com/limxdynamics/tron1-agent/releases/download/v1.0.0/zh_core_web_trf-3.8.0-py3-none-any.whl
-pip install en_core_web_trf-3.8.0-py3-none-any.whl
-pip install zh_core_web_trf-3.8.0-py3-none-any.whl -i https://pypi.tuna.tsinghua.edu.cn/simple
-pip install scipy --upgrade -i https://pypi.tuna.tsinghua.edu.cn/simple
-```
-
-6. 运行项目
-```bash
-python main.py
-```
-
-7. 开机自启
-```bash
-sudo cp tools/auto_start/tronagent.service /etc/systemd/system/tronagent.servce
-sudo systemctl enable tronagent.service
+sudo cp tools/auto_start/tronagent.service /etc/systemd/system/tronagent.service
 sudo systemctl daemon-reload
+sudo systemctl enable tronagent.service
 ```
-***相关配置在```config/```下***,可自行修改
 
-# Acknowledgements
+## 配置
+
+所有设置都在 [config/config.yaml](config/config.yaml)，提示词在 [config/prompt.py](config/prompt.py)。
+
+| 键 | 默认值 | 说明 |
+|---|---|---|
+| `WakeWord` | `hey chuang,小创小创` | 唤醒词，逗号分隔 |
+| `Language` | `zh` | `zh` 或 `en` |
+| `interrupt` | `true` | 是否允许用唤醒词打断回复 |
+| `selected_module` | FunASR、SileroVAD、OpenAILLM、PiperTTS 等 | 每个环节使用的实现 |
+| `LLM.OpenAILLM` | Qwen3-1.7B，`http://127.0.0.1:11434/v1` | 任何 OpenAI 兼容接口都可以 |
+| `Rag.doc_path` | `documents/` | 知识库文件（`.txt`） |
+| `Communication.robot_ip` | 机器人地址 | 改成你的 TRON1 的 IP |
+
+## 添加工具
+
+1. 在 [plugins/function_calls_config.json](plugins/function_calls_config.json) 中描述函数（OpenAI function call 格式）。
+2. 在 [plugins/functions/](plugins/functions/) 下新建文件实现它，可参考 `tron_action.py` 和 `get_weather.py`。
+
+## 目录结构
+
+```
+.
+├── main.py                  # 入口
+├── start.sh                 # systemd 服务调用的启动脚本
+├── bailing/                 # 语音流水线：录音、VAD、ASR、LLM、TTS、播放、记忆、RAG
+├── plugins/                 # 工具描述、任务管理、工具实现（TronAction、天气）
+├── third_party/tron/        # TRON1 WebSocket 客户端和动作流程
+├── config/                  # config.yaml 和提示词
+├── documents/               # RAG 知识库文件
+├── server/                  # 可选：显示对话的网页
+├── api/, api_.py            # 可选：HTTP 接口
+├── tools/                   # 开机自启服务、麦克风 udev 规则
+├── asset/                   # 预置提示音频
+└── models/                  # 下载的模型（第 4 步）
+```
+
+## Acknowledgements
 
 本项目的代码开发基于<a href="https://github.com/wwbin2017/bailing/tree/main/bailing">百聆（Bailing）</a>框架实现，在此特别感谢百聆团队提供的技术支持与开源基础。同时，也向为本 Agent 开发提供助力的其他模型及相关贡献者致以诚挚谢意。
 
-# References
+## References
 
 <a href="https://github.com/wwbin2017/bailing/tree/main/bailing">百聆</a>
 
@@ -130,3 +187,7 @@ sudo systemctl daemon-reload
 <a href="https://huggingface.co/Helsinki-NLP">Helsinki-NLP</a>
 
 <a href="https://www.modelscope.cn/models/unsloth/Qwen3-1.7B-GGUF">Qwen</a>
+
+## License
+
+[MIT](LICENSE)
