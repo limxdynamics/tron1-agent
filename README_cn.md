@@ -1,7 +1,9 @@
-# 中文 | [English](README.md)
-
 <p align="center">
   <img src="doc/banner_zh.png" alt="tron1-agent：你说“小创小创，往前走两步”，TRON1 向前走两步并回答" width="100%">
+</p>
+
+<p align="center">
+  <a href="README.md">English</a> | <b>中文</b>
 </p>
 
 <p align="center">
