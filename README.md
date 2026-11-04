@@ -17,7 +17,7 @@
 
 Real-time voice agent for the LimX **TRON1** robot. Say a sentence, and TRON1 answers out loud or acts on it: stand, sit, walk, turn, change its height or its lights. Speech recognition, the LLM and speech synthesis all run locally, on the robot's Jetson Orin NX.
 
-> **Part of the TRON1 open-source ecosystem.** All TRON1 repositories and where to start: [TRON1 open-source ecosystem](https://github.com/limxdynamics/tron1-rl-isaacgym#tron1-open-source-ecosystem).
+> **Part of the TRON1 open-source ecosystem.** Where to start and the other TRON1 repositories: [TRON1 quick start](https://github.com/limxdynamics/limxdynamics/blob/main/doc/quickstart.md#tron1).
 
 ## Highlights
 

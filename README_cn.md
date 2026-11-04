@@ -17,7 +17,7 @@
 
 逐际动力 **TRON1** 机器人的实时语音智能体。对它说一句话，TRON1 会用语音回答，或者直接执行：站立、坐下、行走、转向、调整高度、切换灯光。语音识别、大模型和语音合成全部在机器人的 Jetson Orin NX 上本地运行。
 
-> **TRON1 开源生态的一部分。** TRON1 全部开源仓库和上手路线：[TRON1 开源生态](https://github.com/limxdynamics/tron1-rl-isaacgym/blob/master/README_cn.md#tron1-开源生态)。
+> **TRON1 开源生态的一部分。** 上手路线和其他 TRON1 仓库：[TRON1 快速上手](https://github.com/limxdynamics/limxdynamics/blob/main/doc/quickstart_cn.md#tron1)。
 
 ## 亮点
 
