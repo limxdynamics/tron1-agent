@@ -6,16 +6,12 @@
   <a href="README.md">English</a> | <b>中文</b>
 </p>
 
-<!-- limx-community:start -->
-<!-- Managed by limxdynamics/limxdynamics/.github/community/sync_community.py; QR code: doc/wechat_qr.png in that repo -->
-<p align="center"><a href="https://github.com/limxdynamics/limxdynamics/blob/main/doc/wechat_qr.png"><img src="https://img.shields.io/badge/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91%E8%80%85%E7%BE%A4-%E6%89%AB%E7%A0%81%E5%8A%A0%E5%85%A5%20%C2%B7%20%E8%A6%86%E7%9B%96%E5%85%A8%E9%83%A8%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE-07C160?style=for-the-badge&logo=wechat&logoColor=white" alt="微信开发者社区"></a></p>
-<!-- limx-community:end -->
-
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2f6feb" alt="License: MIT"></a>
   <img src="https://img.shields.io/badge/python-3.10-2f6feb" alt="Python 3.10">
   <img src="https://img.shields.io/badge/runs%20on-Jetson%20Orin%20NX-2f6feb" alt="Runs on Jetson Orin NX">
   <img src="https://img.shields.io/badge/LLM-Qwen3--1.7B%20%C2%B7%20Ollama-2f6feb" alt="LLM: Qwen3-1.7B on Ollama">
+  <a href="https://github.com/limxdynamics/limxdynamics/blob/main/doc/wechat_qr.png"><img src="https://img.shields.io/badge/%E5%BE%AE%E4%BF%A1-%E5%BC%80%E5%8F%91%E8%80%85%E7%A4%BE%E5%8C%BA-07C160?logo=wechat&logoColor=white" alt="微信开发者社区"></a>
 </p>
 
 # tron1-agent

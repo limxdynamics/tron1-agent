@@ -6,16 +6,12 @@
   <b>English</b> | <a href="README_cn.md">中文</a>
 </p>
 
-<!-- limx-community:start -->
-<!-- Managed by limxdynamics/limxdynamics/.github/community/sync_community.py; QR code: doc/wechat_qr.png in that repo -->
-<p align="center"><a href="https://github.com/limxdynamics/limxdynamics/blob/main/doc/wechat_qr.png"><img src="https://img.shields.io/badge/Join%20Our%20WeChat%20Community-All%20Projects%20Welcome-07C160?style=for-the-badge&logo=wechat&logoColor=white" alt="WeChat Community"></a></p>
-<!-- limx-community:end -->
-
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2f6feb" alt="License: MIT"></a>
   <img src="https://img.shields.io/badge/python-3.10-2f6feb" alt="Python 3.10">
   <img src="https://img.shields.io/badge/runs%20on-Jetson%20Orin%20NX-2f6feb" alt="Runs on Jetson Orin NX">
   <img src="https://img.shields.io/badge/LLM-Qwen3--1.7B%20%C2%B7%20Ollama-2f6feb" alt="LLM: Qwen3-1.7B on Ollama">
+  <a href="https://github.com/limxdynamics/limxdynamics/blob/main/doc/wechat_qr.png"><img src="https://img.shields.io/badge/WeChat-Developer%20Community-07C160?logo=wechat&logoColor=white" alt="WeChat Community"></a>
 </p>
 
 # tron1-agent
